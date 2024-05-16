@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model restoron {
+  id Int @id @default(autoincrement())
+  adress String @unique
+  tele String @unique
+  email String @unique
+  url_twiter String
+  url_facebook String
+  url_youtube String
+  url_linkedin String
+  repa repas[]
+  cetgory categories[]
+  emailSub emailSubscribe[]
+  chef chefs[]
+}
+
+model categories{
+   id Int @id @default(autoincrement())
+  nameCategorie String @unique
+  resto restoron @relation(fields: [restoron_id], references: [id])
+  restoron_id Int
+  repa repas[]
+}
+
+model chefs{
+  id Int @id @default(autoincrement())
+  nameChef String @unique
+  image String
+  designation String
+  resto restoron @relation(fields: [restoron_id], references: [id])
+  restoron_id Int
+}
+
+model repas {
+   id Int @id @default(autoincrement())
+   titre String @unique
+   description String 
+   prix Float 
+   image String
+   category categories @relation(fields: [nameCat], references: [nameCategorie])
+   nameCat String 
+   resto restoron @relation(fields: [restoron_id], references: [id])
+   restoron_id Int
+}
+
+model emailSubscribe {
+     id Int @id @default(autoincrement())
+     email String @unique
+     resto restoron @relation(fields: [restoron_id], references: [id])
+     restoron_id Int
+}
